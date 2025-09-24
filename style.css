@@ -1,460 +1,316 @@
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ============================
+   Mobile-first CSS (2025-09-24)
+   Оптимізовано для телефонів
+   ============================ */
+
+/* Reset */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* Design tokens */
+:root{
+  --bg-primary:#d9ddd2;
+  --bg-secondary:#e8ebe4;
+  --bg-white:#fff;
+  --color-primary:#005c96;
+  --color-accent:#ffd300;
+  --color-dark:#2a2a2a;
+  --color-muted:#6b6b6b;
+
+  --radius:12px; --radius-sm:8px;
+
+  /* Мобільні тіні легші (краще продуктивність) */
+  --shadow-sm:0 1px 6px rgba(0,92,150,.08);
+  --shadow-md:0 2px 12px rgba(0,92,150,.12);
+  --shadow-lg:0 4px 20px rgba(0,92,150,.16);
+
+  /* Розміри шрифтів через clamp */
+  --fz-12: clamp(11px, 2.6vw, 12px);
+  --fz-13: clamp(12px, 2.9vw, 13px);
+  --fz-14: clamp(13px, 3.2vw, 14px);
+  --fz-15: clamp(14px, 3.6vw, 15px);
+  --fz-16: clamp(15px, 3.9vw, 16px);
+  --fz-18: clamp(16px, 4.4vw, 18px);
+  --fz-20: clamp(17px, 4.9vw, 20px);
+  --fz-22: clamp(18px, 5.4vw, 22px);
 }
 
-:root {
-  --bg-primary: #d9ddd2;
-  --bg-secondary: #e8ebe4;
-  --bg-white: #ffffff;
-  --color-primary: #005c96;
-  --color-accent: #ffd300;
-  --color-dark: #2a2a2a;
-  --color-muted: #6b6b6b;
-  --shadow-sm: 0 2px 8px rgba(0, 92, 150, 0.08);
-  --shadow-md: 0 4px 16px rgba(0, 92, 150, 0.12);
-  --shadow-lg: 0 8px 32px rgba(0, 92, 150, 0.16);
-  --radius: 12px;
-  --radius-sm: 8px;
+/* Base */
+html{ scroll-behavior:smooth; }
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter','Roboto',sans-serif;
+  font-size:var(--fz-16);
+  line-height:1.6;
+  color:var(--color-dark);
+  background:linear-gradient(135deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);
+  min-height:100vh;
+  /* На мобільних відключаємо fixed, щоб не лагав скрол у iOS */
+  background-attachment:scroll;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{ max-width:1200px; margin:0 auto; padding:0 16px; }
+
+/* ---------- Header ---------- */
+header{
+  background:var(--bg-white);
+  border-bottom:3px solid var(--color-accent);
+  position:sticky; top:0; z-index:100;
+  box-shadow:var(--shadow-sm);
+  padding-top:env(safe-area-inset-top);
+}
+header .wrap{ padding:12px 16px; }
+
+header h1{
+  font-size:var(--fz-20);
+  color:var(--color-primary);
+  font-weight:700; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px;
+}
+header h1::before{ content:"📸"; font-size:24px; }
+
+/* Навігація — горизонтальна прокрутка з snap */
+nav{
+  display:flex; gap:8px;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; /* Firefox */
+  scroll-snap-type:x proximity;
+  padding-bottom:4px;
+}
+nav::-webkit-scrollbar{ display:none; }
+nav a{
+  flex:0 0 auto; white-space:nowrap; scroll-snap-align:center;
+  color:var(--color-dark); text-decoration:none; font-weight:600;
+  font-size:var(--fz-13); padding:9px 12px; border-radius:999px;
+  border:1px solid rgba(0,92,150,.15); background:#fff;
+  transition:transform .15s ease, box-shadow .15s ease, background-color .2s ease;
+  min-height:44px; display:inline-flex; align-items:center;
+}
+nav a:hover{ transform:translateY(-1px); box-shadow:var(--shadow-sm); background:var(--color-accent); }
+nav a:focus{ outline:3px solid var(--color-accent); outline-offset:2px; }
+
+/* ---------- Hero ---------- */
+.hero{ padding:32px 0; text-align:center; }
+.badge{
+  display:inline-block; background:var(--color-accent); color:var(--color-dark);
+  padding:6px 12px; border-radius:999px; font-size:var(--fz-12); font-weight:700;
+  margin-bottom:12px; box-shadow:var(--shadow-md);
+  animation:pulse 2s infinite;
+}
+.hero p{ font-size:var(--fz-15); max-width:42ch; margin:0 auto 16px; line-height:1.7; }
+.actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.btn{
+  padding:12px 18px; border-radius:var(--radius-sm);
+  font-size:var(--fz-14); font-weight:700; border:2px solid var(--color-primary);
+  background:#fff; color:var(--color-primary); cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, background-color .2s ease;
+  min-height:44px; box-shadow:var(--shadow-sm);
+  touch-action:manipulation;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+.btn.primary{ background:var(--color-primary); color:#fff; }
+.btn.primary:hover{ background:#004775; border-color:#004775; }
+
+/* ---------- Main ---------- */
+main{ padding:20px 0 32px; }
+section{ scroll-margin-top:84px; } /* щоб якорі не ховались під sticky-хедером */
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--bg-white); border-radius:var(--radius);
+  margin-bottom:20px; overflow:hidden; box-shadow:var(--shadow-md);
+  transition:transform .15s ease, box-shadow .15s ease;
+  border:1px solid rgba(0,92,150,.1);
+}
+.card:hover{ box-shadow:var(--shadow-lg); transform:translateY(-1px); }
+.card .head{
+  padding:16px;
+  background:linear-gradient(135deg, var(--color-primary), #0074b3);
+  color:#fff; position:relative; overflow:hidden;
+}
+.card .head::after{
+  content:''; position:absolute; top:-50%; right:-50%; width:200%; height:200%;
+  background:radial-gradient(circle, rgba(255,211,0,.1) 0%, transparent 70%);
+  animation:rotate 20s linear infinite;
+}
+.card h2{ font-size:var(--fz-18); margin-bottom:2px; position:relative; z-index:1; }
+.hint{ font-size:var(--fz-12); opacity:.95; font-weight:400; position:relative; z-index:1; }
+
+/* ---------- Tables (desktop style by default improved for mobile) ---------- */
+table{ width:100%; border-collapse:separate; border-spacing:0; }
+thead{ background:var(--bg-secondary); }
+thead th{
+  padding:14px 16px; text-align:left; font-weight:700; color:var(--color-primary);
+  font-size:var(--fz-12); text-transform:uppercase; letter-spacing:.5px;
+  border-bottom:2px solid var(--color-accent);
+}
+tbody tr{ transition:background-color .15s ease; position:relative; }
+tbody tr:hover{ background:linear-gradient(90deg, rgba(255,211,0,.08) 0%, rgba(255,211,0,.04) 100%); }
+tbody tr::after{
+  content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--bg-primary), transparent);
+}
+tbody td{ padding:14px 16px; font-size:var(--fz-14); color:var(--color-dark); }
+tbody td:first-child{ font-weight:600; color:var(--color-primary); }
+
+.price{
+  font-weight:800; color:var(--color-primary); font-size:var(--fz-15);
+  white-space:nowrap; position:relative;
+}
+.price::before{
+  content:''; position:absolute; left:-8px; top:50%; width:4px; height:60%;
+  background:var(--color-accent); transform:translateY(-50%); border-radius:2px;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--color-dark);
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-  min-height: 100vh;
-  background-attachment: fixed;
-}
+/* ---------- Grid ---------- */
+.grid{ display:grid; grid-template-columns:1fr; gap:16px; }
 
-.wrap {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+/* ---------- Footers in cards ---------- */
+.card .foot{
+  padding:14px 16px;
+  background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  border-top:1px solid rgba(0,92,150,.1);
 }
+.note{ font-size:var(--fz-12); color:var(--color-muted); font-style:italic; }
 
-/* Header */
-header {
-  background: var(--bg-white);
-  border-bottom: 3px solid var(--color-accent);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: var(--shadow-sm);
+/* ---------- Page footer ---------- */
+footer{
+  background:var(--color-primary); color:#fff; padding:20px 0; margin-top:40px;
 }
-
-header .wrap {
-  padding: 20px;
+footer .cols{
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
 }
+footer small{ font-size:var(--fz-12); opacity:.9; }
+.muted{ color:var(--color-muted); font-weight:400; }
 
-header h1 {
-  font-size: 24px;
-  color: var(--color-primary);
-  font-weight: 700;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-header h1::before {
-  content: "📸";
-  font-size: 28px;
-}
-
-nav {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-nav a {
-  color: var(--color-dark);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  transition: all 0.3s ease;
-  background: transparent;
-  position: relative;
-}
-
-nav a:hover {
-  background: var(--color-accent);
-  color: var(--color-dark);
-  transform: translateY(-2px);
-}
-
-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--color-primary);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-nav a:hover::after {
-  width: 80%;
-}
-
-/* Hero Section */
-.hero {
-  padding: 60px 20px;
-  text-align: center;
-  position: relative;
-}
-
-.badge {
-  display: inline-block;
-  background: var(--color-accent);
-  color: var(--color-dark);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-md);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.hero p {
-  font-size: 18px;
-  color: var(--color-dark);
-  max-width: 600px;
-  margin: 0 auto 30px;
-  line-height: 1.8;
-}
-
-.actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 12px 32px;
-  border-radius: var(--radius-sm);
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-  background: var(--bg-white);
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-.btn.primary {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-}
-
-.btn.primary:hover {
-  background: #004775;
-  border-color: #004775;
-}
-
-/* Main Content */
-main {
-  padding: 40px 20px;
-}
-
-/* Cards */
-.card {
-  background: var(--bg-white);
-  border-radius: var(--radius);
-  margin-bottom: 32px;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 92, 150, 0.1);
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-.card .head {
-  padding: 24px;
-  background: linear-gradient(135deg, var(--color-primary), #0074b3);
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-.card .head::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 211, 0, 0.1) 0%, transparent 70%);
-  animation: rotate 20s linear infinite;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.card h2 {
-  font-size: 22px;
-  margin-bottom: 4px;
-  position: relative;
-  z-index: 1;
-}
-
-.hint {
-  font-size: 14px;
-  opacity: 0.95;
-  font-weight: 400;
-  position: relative;
-  z-index: 1;
-}
-
-/* Tables */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-thead {
-  background: var(--bg-secondary);
-}
-
-thead th {
-  padding: 16px 20px;
-  text-align: left;
-  font-weight: 600;
-  color: var(--color-primary);
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid var(--color-accent);
-}
-
-tbody tr {
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-tbody tr:hover {
-  background: linear-gradient(90deg, rgba(255, 211, 0, 0.1) 0%, rgba(255, 211, 0, 0.05) 100%);
-}
-
-tbody tr::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--bg-primary), transparent);
-}
-
-tbody td {
-  padding: 16px 20px;
-  font-size: 15px;
-  color: var(--color-dark);
-}
-
-tbody td:first-child {
-  font-weight: 500;
-  color: var(--color-primary);
-}
-
-.price {
-  font-weight: 700;
-  color: var(--color-primary);
-  font-size: 16px;
-  white-space: nowrap;
-  position: relative;
-}
-
-.price::before {
-  content: '';
-  position: absolute;
-  left: -8px;
-  top: 50%;
-  width: 4px;
-  height: 60%;
-  background: var(--color-accent);
-  transform: translateY(-50%);
-  border-radius: 2px;
-}
-
-/* Grid Layout */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-/* Footer */
-.card .foot {
-  padding: 16px 24px;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-  border-top: 1px solid rgba(0, 92, 150, 0.1);
-}
-
-.note {
-  font-size: 14px;
-  color: var(--color-muted);
-  font-style: italic;
-}
-
-footer {
-  background: var(--color-primary);
-  color: white;
-  padding: 30px 0;
-  margin-top: 60px;
-}
-
-footer .cols {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-footer small {
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-.muted {
-  color: var(--color-muted);
-  font-weight: 400;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  header h1 {
-    font-size: 20px;
+/* ---------- Mobile table → cards (≤600px) ---------- */
+@media (max-width:600px){
+  /* Ховаємо заголовки таблиці, кожний рядок стає «карткою» */
+  thead{ display:none; }
+  table, tbody, tr, td{ display:block; width:100%; }
+  tbody tr{
+    background:#fff; border:1px solid rgba(0,92,150,.12);
+    border-radius:12px; box-shadow:var(--shadow-sm);
+    padding:10px 12px; margin:10px 12px;
   }
-  
-  nav {
-    gap: 8px;
+  tbody tr::after{ display:none; }
+  tbody td{
+    padding:8px 0; border:none; position:relative;
+    display:grid; grid-template-columns:1fr; gap:4px;
   }
-  
-  nav a {
-    padding: 6px 12px;
-    font-size: 13px;
+  /* Підпис колонки */
+  tbody td::before{
+    content:attr(data-label); /* fallback порожній, далі задано секційно */
+    font-size:var(--fz-12); color:var(--color-muted);
+    text-transform:uppercase; letter-spacing:.04em;
+    order:-1;
   }
-  
-  .hero {
-    padding: 40px 20px;
-  }
-  
-  .card h2 {
-    font-size: 18px;
-  }
-  
-  table {
-    font-size: 14px;
-  }
-  
-  thead th, tbody td {
-    padding: 12px;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
+  /* Ціну підтягуємо в кінець і виділяємо */
+  .price{ justify-self:end; }
+  .price::before{ left:auto; right:-6px; width:3px; }
+}
+
+/* Секційні підписи колонок для mobile (без зміни HTML) */
+@media (max-width:600px){
+  /* Документи */
+  #docs td:nth-child(1)::before{ content:"Послуга"; }
+  #docs td:nth-child(2)::before{ content:"Що входить"; }
+  #docs td:nth-child(3)::before{ content:"Ціна"; }
+
+  /* Фотодрук */
+  #print td:nth-child(1)::before{ content:"Формат"; }
+  #print td:nth-child(2)::before{ content:"Опис"; }
+  #print td:nth-child(3)::before{ content:"Ціна"; }
+
+  /* Скан/копії (дві таблиці — одна розмітка) */
+  #scan td:nth-child(1)::before{ content:"Послуга"; }
+  #scan td:nth-child(2)::before{ content:"Деталі"; }
+  #scan td:nth-child(3)::before{ content:"Ціна"; }
+
+  /* Ретуш, Студія, Предметка, Бізнес */
+  #retouch td:nth-child(1)::before,
+  #studio  td:nth-child(1)::before,
+  #product td:nth-child(1)::before,
+  #biz     td:nth-child(1)::before{ content:"Послуга"; }
+  #retouch td:nth-child(2)::before,
+  #studio  td:nth-child(2)::before,
+  #product td:nth-child(2)::before,
+  #biz     td:nth-child(2)::before{ content:"Що входить"; }
+  #retouch td:nth-child(3)::before,
+  #studio  td:nth-child(3)::before,
+  #product td:nth-child(3)::before,
+  #biz     td:nth-child(3)::before{ content:"Ціна"; }
+
+  /* Пакети */
+  #bundles td:nth-child(1)::before{ content:"Пакет"; }
+  #bundles td:nth-child(2)::before{ content:"Склад"; }
+  #bundles td:nth-child(3)::before{ content:"Ціна"; }
+
+  /* Додатково */
+  #extra td:nth-child(1)::before{ content:"Опція"; }
+  #extra td:nth-child(2)::before{ content:"Опис"; }
+  #extra td:nth-child(3)::before{ content:"Умови"; }
+}
+
+/* ---------- Medium+ (≥768px): розширені відступи, гріди, повертаємо класичні таблиці ---------- */
+@media (min-width:768px){
+  header .wrap{ padding:20px; }
+  header h1{ font-size:24px; }
+  nav{ gap:12px; overflow:visible; }
+  nav a{ border-radius:var(--radius-sm); font-size:14px; padding:8px 14px; }
+
+  .hero{ padding:60px 20px; }
+  .badge{ font-size:14px; padding:8px 16px; }
+  .hero p{ font-size:18px; margin-bottom:24px; }
+
+  main{ padding:40px 20px; }
+  .card{ margin-bottom:24px; }
+
+  /* Повертаємо нормальні таблиці */
+  thead{ display:table-header-group; }
+  table{ display:table; }
+  tbody, tr, td{ display:table-row-group; display:table-row; display:table-cell; }
+  tbody tr{ margin:0; padding:0; border:none; box-shadow:none; }
+  tbody td::before{ content:none !important; }
+  .grid{ grid-template-columns:repeat( auto-fit, minmax(300px,1fr) ); gap:20px; }
+}
+
+/* ---------- Large (≥1024px): як було у вас ---------- */
+@media (min-width:1024px){
+  .wrap{ padding:0 20px; }
+  .card h2{ font-size:22px; }
+  .card .head{ padding:24px; }
+  thead th{ padding:16px 20px; }
+  tbody td{ padding:16px 20px; }
+}
+
+/* ---------- Print ---------- */
+@media print{
+  header{ position:static; padding-top:0; }
+  .btn,.actions,.badge{ display:none !important; }
+  .card{ box-shadow:none; border:1px solid #ddd; page-break-inside:avoid; }
+  body{ background:#fff; }
+  .card .head{
+    background:var(--color-primary) !important;
+    print-color-adjust:exact; -webkit-print-color-adjust:exact;
   }
 }
 
-/* Print Styles */
-@media print {
-  header {
-    position: static;
-  }
-  
-  .btn, .actions {
-    display: none;
-  }
-  
-  .card {
-    box-shadow: none;
-    border: 1px solid #ddd;
-    page-break-inside: avoid;
-  }
-  
-  body {
-    background: white;
-  }
-  
-  .card .head {
-    background: var(--color-primary) !important;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
+/* ---------- A11y, motion, selection ---------- */
+a:focus, button:focus{ outline:3px solid var(--color-accent); outline-offset:2px; }
+::selection{ background:var(--color-accent); color:var(--color-dark); }
+
+/* Менше руху для тих, хто не любить анімації */
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition:none !important; }
 }
 
-/* Smooth Scroll */
-html {
-  scroll-behavior: smooth;
-}
+/* Animations (будуть вимкнені у prefers-reduced-motion) */
+@keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+@keyframes rotate{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
-/* Focus Styles */
-a:focus, button:focus {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-/* Selection */
-::selection {
-  background: var(--color-accent);
-  color: var(--color-dark);
-}
-
-/* Loading Animation for future use */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.loading {
-  animation: shimmer 2s infinite;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 1000px 100%;
-}
-
-/* Hover effects for sections */
-section:target .head {
-  animation: highlight 0.5s ease;
-}
-
-@keyframes highlight {
-  0% { background: linear-gradient(135deg, var(--color-primary), #0074b3); }
-  50% { background: linear-gradient(135deg, var(--color-accent), #ffdd33); }
-  100% { background: linear-gradient(135deg, var(--color-primary), #0074b3); }
+/* Hover target section highlight */
+section:target .head{ animation:highlight .5s ease; }
+@keyframes highlight{
+  0%{ background:linear-gradient(135deg,var(--color-primary),#0074b3); }
+  50%{ background:linear-gradient(135deg,var(--color-accent),#ffdd33); }
+  100%{ background:linear-gradient(135deg,var(--color-primary),#0074b3); }
 }

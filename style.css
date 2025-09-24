@@ -250,36 +250,58 @@ footer small{ font-size:var(--fz-12); opacity:.9; }
   #extra td:nth-child(3)::before{ content:"Умови"; }
 }
 
-/* ---------- Medium+ (≥768px): розширені відступи, гріди, повертаємо класичні таблиці ---------- */
+/* ---------- Medium+ (≥768px): десктопний лейаут, класичні таблиці ---------- */
 @media (min-width:768px){
+  /* Header layout */
   header .wrap{ padding:20px; }
-  header h1{ font-size:24px; }
-  nav{ gap:12px; overflow:visible; }
-  nav a{ border-radius:var(--radius-sm); font-size:14px; padding:8px 14px; }
+  /* робимо хедерну .row флексом лише на десктопі */
+  header .row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+  }
+  header h1{ font-size:24px; margin:0; }
 
+  /* Навігація без горизонтального скрола, дозволяємо переноси */
+  nav{ gap:12px; overflow:visible; flex-wrap:wrap; }
+  nav a{ border-radius:var(--radius-sm); font-size:14px; padding:10px 14px; }
+
+  /* Hero */
   .hero{ padding:60px 20px; }
   .badge{ font-size:14px; padding:8px 16px; }
-  .hero p{ font-size:18px; margin-bottom:24px; }
+  .hero p{ font-size:18px; margin-bottom:24px; max-width:60ch; }
 
+  /* Main */
   main{ padding:40px 20px; }
   .card{ margin-bottom:24px; }
 
-  /* Повертаємо нормальні таблиці */
+  /* Повертаємо НОРМАЛЬНІ таблиці (важливо — правильні display для кожного тегу) */
+  table{ display:table; width:100%; border-collapse:separate; border-spacing:0; }
   thead{ display:table-header-group; }
-  table{ display:table; }
-  tbody, tr, td{ display:table-row-group; display:table-row; display:table-cell; }
-  tbody tr{ margin:0; padding:0; border:none; box-shadow:none; }
+  tbody{ display:table-row-group; }
+  tr{ display:table-row; }
+  th, td{ display:table-cell; }
+
+  /* Прибираємо мобільну «карткову» стилізацію рядків */
+  tbody tr{ background:none; border:none; box-shadow:none; padding:0; margin:0; }
+  tbody td{ padding:14px 16px; }
   tbody td::before{ content:none !important; }
-  .grid{ grid-template-columns:repeat( auto-fit, minmax(300px,1fr) ); gap:20px; }
+
+  /* Сітка в секції #scan залишається адаптивною */
+  .grid{ grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
+
+  /* Вирівнюємо цінову колонку вправо (і заголовок, і комірки) */
+  thead th:nth-child(3),
+  tbody td:nth-child(3){ text-align:right; }
 }
 
-/* ---------- Large (≥1024px): як було у вас ---------- */
+/* ---------- Large (≥1024px): дрібні покращення відступів і типографіки ---------- */
 @media (min-width:1024px){
-  .wrap{ padding:0 20px; }
+  .wrap{ padding:0 24px; }
   .card h2{ font-size:22px; }
   .card .head{ padding:24px; }
   thead th{ padding:16px 20px; }
   tbody td{ padding:16px 20px; }
+  nav a{ padding:10px 16px; }
 }
 
 /* ---------- Print ---------- */

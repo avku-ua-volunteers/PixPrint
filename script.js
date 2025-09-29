@@ -59,9 +59,25 @@ function safeLSSet(key, val){
   const fadeR = wrap.querySelector('.nav-fade.right');
   const moreBtn = document.querySelector('.nav-more');
 
+  // Автопрокрутка активного пункта в центр (только мобильный и когда есть переполнение)
+  const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
+  const canHorizScroll = () => nav.scrollWidth > nav.clientWidth + 2;
+  function scrollActiveIntoView(link){
+    if (!link || !isMobile() || !canHorizScroll()) return;
+    const targetLeft = link.offsetLeft - (nav.clientWidth - link.offsetWidth) / 2;
+    const maxLeft = nav.scrollWidth - nav.clientWidth;
+    const leftPos = Math.max(0, Math.min(targetLeft, maxLeft));
+    // Если поддерживается плавная прокрутка — используем, иначе просто присваиваем
+    try {
+      nav.scrollTo({ left: leftPos, behavior: 'smooth' });
+    } catch {
+      nav.scrollLeft = leftPos;
+    }
+  }
+
   // Показ/скрытие стрелок и градиентов
   function updateOverflowUI() {
-    const canScroll = nav.scrollWidth > nav.clientWidth + 2;
+    const canScroll = canHorizScroll();
     const atStart = nav.scrollLeft <= 2;
     const atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 2;
 
@@ -101,7 +117,7 @@ function safeLSSet(key, val){
       }
     });
 
-    // Клик по пунктам в шите: закрыть и подсветить соответствующую вкладку в хедере
+    // Клик по пунктам в шите: закрыть, подсветить и прокрутить nav к активному
     sheet.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         if (sheet.close) sheet.close(); else sheet.removeAttribute('open');
@@ -112,38 +128,57 @@ function safeLSSet(key, val){
 
   // Scroll-spy (подсветка активного раздела)
   const links = Array.from(nav.querySelectorAll('a'));
+  let currentHref = null;
 
   function setActive(href) {
+    if (!href) return;
+    if (href === currentHref) return;
+    currentHref = href;
+
+    let activeLink = null;
     links.forEach(a => {
       const match = a.getAttribute('href') === href;
       a.classList.toggle('active', match);
-      if (match) a.setAttribute('aria-current', 'location');
-      else a.removeAttribute('aria-current');
+      if (match) {
+        a.setAttribute('aria-current', 'location');
+        activeLink = a;
+      } else {
+        a.removeAttribute('aria-current');
+      }
     });
+
+    // ВАЖНО: на мобилке прокрутить горизонтальное меню к активному пункту
+    scrollActiveIntoView(activeLink);
   }
 
-  // Немедленная подсветка при клике по ссылкам в самом nav
+  // Подсветка и прокрутка при клике по ссылкам в самом nav
   links.forEach(a => {
     a.addEventListener('click', () => setActive(a.getAttribute('href')));
   });
 
-  // Начальная подсветка (если на старте мы над героем, выбираем #docs)
+  // Начальная подсветка
   setActive(location.hash || '#docs');
 
   if ('IntersectionObserver' in window) {
     const obs = new IntersectionObserver((ents) => {
-      ents.forEach(ent => {
+      // Выбираем самый "центральный" видимый элемент, чтобы уменьшить дрожание
+      let topCandidate = null;
+      for (const ent of ents) {
         if (ent.isIntersecting) {
-          const href = '#' + ent.target.id;
-          setActive(href);
+          topCandidate = ent;
+          break;
         }
-      });
+      }
+      if (topCandidate) {
+        const href = '#' + topCandidate.target.id;
+        setActive(href);
+      }
     }, { rootMargin: '-60% 0px -35% 0px', threshold: 0.01 });
 
     document.querySelectorAll('main section[id]').forEach(sec => obs.observe(sec));
   }
 
-  // Подсветка при смене хэша (например, переход по ссылке из истории)
+  // Подсветка/прокрутка при смене хэша (переход по истории и т.п.)
   window.addEventListener('hashchange', () => setActive(location.hash || '#docs'));
 
   // Инициализация

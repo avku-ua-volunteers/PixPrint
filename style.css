@@ -1,10 +1,23 @@
 /* ============================
-   Mobile-first CSS (2025-09-24)
+   Mobile-first CSS (2025-09-29)
    Оптимізовано для телефонів
    ============================ */
 
 /* Reset */
 * { margin:0; padding:0; box-sizing:border-box; }
+
+/* A11y helpers */
+.sr-only{
+  position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.skip-link{
+  position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+}
+.skip-link:focus{
+  left:16px; top:12px; width:auto; height:auto; padding:8px 12px; z-index:1000;
+  background:#fff; border:2px solid #005c96; border-radius:10px;
+}
 
 /* Design tokens */
 :root{
@@ -18,12 +31,10 @@
 
   --radius:12px; --radius-sm:8px;
 
-  /* Мобільні тіні легші (краще продуктивність) */
   --shadow-sm:0 1px 6px rgba(0,92,150,.08);
   --shadow-md:0 2px 12px rgba(0,92,150,.12);
   --shadow-lg:0 4px 20px rgba(0,92,150,.16);
 
-  /* Розміри шрифтів через clamp */
   --fz-12: clamp(11px, 2.6vw, 12px);
   --fz-13: clamp(12px, 2.9vw, 13px);
   --fz-14: clamp(13px, 3.2vw, 14px);
@@ -32,6 +43,8 @@
   --fz-18: clamp(16px, 4.4vw, 18px);
   --fz-20: clamp(17px, 4.9vw, 20px);
   --fz-22: clamp(18px, 5.4vw, 22px);
+
+  --sticky-offset: 84px; /* будет обновлено JS по факту */
 }
 
 /* Base */
@@ -43,7 +56,6 @@ body{
   color:var(--color-dark);
   background:linear-gradient(135deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);
   min-height:100vh;
-  /* На мобільних відключаємо fixed, щоб не лагав скрол у iOS */
   background-attachment:scroll;
   -webkit-tap-highlight-color:transparent;
 }
@@ -58,20 +70,26 @@ header{
   padding-top:env(safe-area-inset-top);
 }
 header .wrap{ padding:12px 16px; }
-
+header .row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; flex-wrap:wrap;
+}
 header h1{
   font-size:var(--fz-20);
   color:var(--color-primary);
-  font-weight:700; margin-bottom:8px;
+  font-weight:700; margin:0;
   display:flex; align-items:center; gap:8px;
 }
 header h1::before{ content:"📸"; font-size:24px; }
 
-/* Навігація — горизонтальна прокрутка з snap */
+/* ---------- Navigation ---------- */
+.nav-wrap{ display:flex; align-items:center; gap:8px; width:100%; }
+.nav-viewport{ position:relative; flex:1 1 auto; min-width:0; }
+
 nav{
   display:flex; gap:8px;
   overflow-x:auto; -webkit-overflow-scrolling:touch;
-  scrollbar-width:none; /* Firefox */
+  scrollbar-width:none;
   scroll-snap-type:x proximity;
   padding-bottom:4px;
 }
@@ -85,7 +103,42 @@ nav a{
   min-height:44px; display:inline-flex; align-items:center;
 }
 nav a:hover{ transform:translateY(-1px); box-shadow:var(--shadow-sm); background:var(--color-accent); }
-nav a:focus{ outline:3px solid var(--color-accent); outline-offset:2px; }
+nav a:focus-visible{ outline:3px solid var(--color-accent); outline-offset:2px; }
+
+/* Нав-стрелки поверх nav без магических чисел */
+.nav-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:34px; height:34px; border-radius:50%; border:1px solid rgba(0,92,150,.2);
+  background:#fff; box-shadow:var(--shadow-sm); font-size:22px; font-weight:800;
+  display:grid; place-items:center; opacity:.98; z-index:2;
+}
+.nav-arrow.left{ left:6px; }
+.nav-arrow.right{ right:6px; }
+
+/* Градиенты переполнения — тоже внутри viewport */
+.nav-fade{
+  position:absolute; top:0; bottom:0; width:28px; pointer-events:none; z-index:1; opacity:0;
+  transition:opacity .15s ease;
+}
+.nav-fade.left{ left:0; background:linear-gradient(90deg, #fff 0%, rgba(255,255,255,0) 100%); }
+.nav-fade.right{ right:0; background:linear-gradient(270deg, #fff 0%, rgba(255,255,255,0) 100%); }
+
+/* Хинт «Проведіть →» */
+.nav-hint{
+  position:absolute; bottom:-10px; right:8px; font-size:var(--fz-12);
+  background:#fff; border:1px dashed rgba(0,92,150,.35); padding:4px 8px; border-radius:999px;
+  box-shadow:var(--shadow-sm); animation:hint-nudge 2s ease infinite;
+}
+@keyframes hint-nudge{ 0%,100%{ transform:translateX(0) } 50%{ transform:translateX(6px) } }
+@media (prefers-reduced-motion:reduce){ .nav-hint{ animation:none } }
+
+.nav-more{
+  flex:0 0 auto; white-space:nowrap; font-weight:700; font-size:var(--fz-13);
+  padding:9px 12px; border-radius:999px; border:2px solid var(--color-primary);
+  background:#fff; color:var(--color-primary); min-height:44px; box-shadow:var(--shadow-sm);
+}
+.nav-more:active{ transform:scale(.98); }
+nav a.active{ background:var(--color-accent); box-shadow:var(--shadow-sm); }
 
 /* ---------- Hero ---------- */
 .hero{ padding:32px 0; text-align:center; }
@@ -106,12 +159,13 @@ nav a:focus{ outline:3px solid var(--color-accent); outline-offset:2px; }
   touch-action:manipulation;
 }
 .btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+.btn:focus-visible{ outline:3px solid var(--color-accent); outline-offset:2px; }
 .btn.primary{ background:var(--color-primary); color:#fff; }
 .btn.primary:hover{ background:#004775; border-color:#004775; }
 
 /* ---------- Main ---------- */
 main{ padding:20px 0 32px; }
-section{ scroll-margin-top:84px; } /* щоб якорі не ховались під sticky-хедером */
+section{ scroll-margin-top:var(--sticky-offset); }
 
 /* ---------- Cards ---------- */
 .card{
@@ -134,7 +188,7 @@ section{ scroll-margin-top:84px; } /* щоб якорі не ховались п
 .card h2{ font-size:var(--fz-18); margin-bottom:2px; position:relative; z-index:1; }
 .hint{ font-size:var(--fz-12); opacity:.95; font-weight:400; position:relative; z-index:1; }
 
-/* ---------- Tables (desktop style by default improved for mobile) ---------- */
+/* ---------- Tables ---------- */
 table{ width:100%; border-collapse:separate; border-spacing:0; }
 thead{ background:var(--bg-secondary); }
 thead th{
@@ -148,7 +202,7 @@ tbody tr::after{
   content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
   background:linear-gradient(90deg, transparent, var(--bg-primary), transparent);
 }
-tbody td{ padding:14px 16px; font-size:var(--fz-14); color:var(--color-dark); }
+td{ padding:14px 16px; font-size:var(--fz-14); color:var(--color-dark); }
 tbody td:first-child{ font-weight:600; color:var(--color-primary); }
 
 .price{
@@ -162,6 +216,8 @@ tbody td:first-child{ font-weight:600; color:var(--color-primary); }
 
 /* ---------- Grid ---------- */
 .grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+.in-card{ padding:12px 12px 0; }
+.subcard{ border:none; }
 
 /* ---------- Footers in cards ---------- */
 .card .foot{
@@ -170,6 +226,9 @@ tbody td:first-child{ font-weight:600; color:var(--color-primary); }
   border-top:1px solid rgba(0,92,150,.1);
 }
 .note{ font-size:var(--fz-12); color:var(--color-muted); font-style:italic; }
+
+/* Контакты */
+.contacts{ display:block; line-height:1.8; }
 
 /* ---------- Page footer ---------- */
 footer{
@@ -183,7 +242,6 @@ footer small{ font-size:var(--fz-12); opacity:.9; }
 
 /* ---------- Mobile table → cards (≤600px) ---------- */
 @media (max-width:600px){
-  /* Ховаємо заголовки таблиці, кожний рядок стає «карткою» */
   thead{ display:none; }
   table, tbody, tr, td{ display:block; width:100%; }
   tbody tr{
@@ -192,40 +250,34 @@ footer small{ font-size:var(--fz-12); opacity:.9; }
     padding:10px 12px; margin:10px 12px;
   }
   tbody tr::after{ display:none; }
-  tbody td{
+  td{
     padding:8px 0; border:none; position:relative;
     display:grid; grid-template-columns:1fr; gap:4px;
   }
-  /* Підпис колонки */
-  tbody td::before{
-    content:attr(data-label); /* fallback порожній, далі задано секційно */
+  td::before{
+    content:attr(data-label);
     font-size:var(--fz-12); color:var(--color-muted);
     text-transform:uppercase; letter-spacing:.04em;
     order:-1;
   }
-  /* Ціну підтягуємо в кінець і виділяємо */
   .price{ justify-self:end; }
   .price::before{ left:auto; right:-6px; width:3px; }
 }
 
 /* Секційні підписи колонок для mobile (без зміни HTML) */
 @media (max-width:600px){
-  /* Документи */
   #docs td:nth-child(1)::before{ content:"Послуга"; }
   #docs td:nth-child(2)::before{ content:"Що входить"; }
   #docs td:nth-child(3)::before{ content:"Ціна"; }
 
-  /* Фотодрук */
   #print td:nth-child(1)::before{ content:"Формат"; }
   #print td:nth-child(2)::before{ content:"Опис"; }
   #print td:nth-child(3)::before{ content:"Ціна"; }
 
-  /* Скан/копії (дві таблиці — одна розмітка) */
   #scan td:nth-child(1)::before{ content:"Послуга"; }
   #scan td:nth-child(2)::before{ content:"Деталі"; }
   #scan td:nth-child(3)::before{ content:"Ціна"; }
 
-  /* Ретуш, Студія, Предметка, Бізнес */
   #retouch td:nth-child(1)::before,
   #studio  td:nth-child(1)::before,
   #product td:nth-child(1)::before,
@@ -239,75 +291,64 @@ footer small{ font-size:var(--fz-12); opacity:.9; }
   #product td:nth-child(3)::before,
   #biz     td:nth-child(3)::before{ content:"Ціна"; }
 
-  /* Пакети */
   #bundles td:nth-child(1)::before{ content:"Пакет"; }
   #bundles td:nth-child(2)::before{ content:"Склад"; }
   #bundles td:nth-child(3)::before{ content:"Ціна"; }
 
-  /* Додатково */
   #extra td:nth-child(1)::before{ content:"Опція"; }
   #extra td:nth-child(2)::before{ content:"Опис"; }
   #extra td:nth-child(3)::before{ content:"Умови"; }
 }
 
-/* ---------- Medium+ (≥768px): десктопний лейаут, класичні таблиці ---------- */
+/* ---------- Medium+ (≥768px) ---------- */
 @media (min-width:768px){
-  /* Header layout */
   header .wrap{ padding:20px; }
-  /* робимо хедерну .row флексом лише на десктопі */
-  header .row{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:16px; flex-wrap:wrap;
-  }
-  header h1{ font-size:24px; margin:0; }
+  header h1{ font-size:24px; }
 
-  /* Навігація без горизонтального скрола, дозволяємо переноси */
   nav{ gap:12px; overflow:visible; flex-wrap:wrap; }
   nav a{ border-radius:var(--radius-sm); font-size:14px; padding:10px 14px; }
 
-  /* Hero */
   .hero{ padding:60px 20px; }
   .badge{ font-size:14px; padding:8px 16px; }
   .hero p{ font-size:18px; margin-bottom:24px; max-width:60ch; }
 
-  /* Main */
   main{ padding:40px 20px; }
   .card{ margin-bottom:24px; }
 
-  /* Повертаємо НОРМАЛЬНІ таблиці (важливо — правильні display для кожного тегу) */
   table{ display:table; width:100%; border-collapse:separate; border-spacing:0; }
   thead{ display:table-header-group; }
   tbody{ display:table-row-group; }
   tr{ display:table-row; }
   th, td{ display:table-cell; }
 
-  /* Прибираємо мобільну «карткову» стилізацію рядків */
   tbody tr{ background:none; border:none; box-shadow:none; padding:0; margin:0; }
-  tbody td{ padding:14px 16px; }
-  tbody td::before{ content:none !important; }
+  td{ padding:14px 16px; }
+  td::before{ content:none !important; }
 
-  /* Сітка в секції #scan залишається адаптивною */
   .grid{ grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:20px; }
 
-  /* Вирівнюємо цінову колонку вправо (і заголовок, і комірки) */
   thead th:nth-child(3),
   tbody td:nth-child(3){ text-align:right; }
+
+  /* На десктопе стрелки/градиенты/хинт скрываем,
+     кнопка «Усі розділи» остаётся */
+  .nav-arrow,.nav-fade,.nav-hint{ display:none !important; }
 }
 
-/* ---------- Large (≥1024px): дрібні покращення відступів і типографіки ---------- */
+/* ---------- Large (≥1024px) ---------- */
 @media (min-width:1024px){
   .wrap{ padding:0 24px; }
   .card h2{ font-size:22px; }
   .card .head{ padding:24px; }
   thead th{ padding:16px 20px; }
-  tbody td{ padding:16px 20px; }
+  td{ padding:16px 20px; }
   nav a{ padding:10px 16px; }
 }
 
 /* ---------- Print ---------- */
 @media print{
   header{ position:static; padding-top:0; }
-  .btn,.actions,.badge{ display:none !important; }
+  .btn,.actions,.badge,.nav-wrap{ display:none !important; }
   .card{ box-shadow:none; border:1px solid #ddd; page-break-inside:avoid; }
   body{ background:#fff; }
   .card .head{
@@ -317,15 +358,14 @@ footer small{ font-size:var(--fz-12); opacity:.9; }
 }
 
 /* ---------- A11y, motion, selection ---------- */
-a:focus, button:focus{ outline:3px solid var(--color-accent); outline-offset:2px; }
+a:focus-visible, button:focus-visible{ outline:3px solid var(--color-accent); outline-offset:2px; }
 ::selection{ background:var(--color-accent); color:var(--color-dark); }
 
-/* Менше руху для тих, хто не любить анімації */
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition:none !important; }
 }
 
-/* Animations (будуть вимкнені у prefers-reduced-motion) */
+/* Animations */
 @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
 @keyframes rotate{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
 

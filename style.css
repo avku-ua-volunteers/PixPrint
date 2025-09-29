@@ -92,6 +92,7 @@ nav{
   scrollbar-width:none;
   scroll-snap-type:x proximity;
   padding-bottom:4px;
+  scroll-behavior:smooth; /* ← добавлено для плавной горизонтальной прокрутки */
 }
 nav::-webkit-scrollbar{ display:none; }
 nav a{

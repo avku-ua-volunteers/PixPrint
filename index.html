@@ -1,47 +1,70 @@
 <!doctype html>
-<html lang="uk">
+<html lang="uk" class="no-js">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Прайс‑лист | Фото‑точка</title>
-  <meta name="description" content="Прайс‑лист фото‑послуг: фото на документи, фотодрук, сканування, копіювання, ретуш та ІІ‑сервіси, студійна і предметна зйомка. Ціни — нижче середніх." />
+  <title>Прайс-лист | Фото-точка</title>
+  <meta name="description" content="Прайс-лист фото-послуг: фото на документи, фотодрук, сканування, копіювання, ретуш та ІІ-сервіси, студійна і предметна зйомка. Ціни — нижче середніх." />
+  <meta name="theme-color" content="#005c96" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' x='8' font-size='42'%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Перейти до змісту</a>
+
   <header>
-    <div class="wrap row">
-      <h1>Фото‑точка — Прайс‑лист</h1>
-      <nav>
-        <a href="#docs">Документи</a>
-        <a href="#print">Фотодрук</a>
-        <a href="#scan">Скан/копії</a>
-        <a href="#retouch">Ретуш та ІІ</a>
-        <a href="#studio">Студія</a>
-        <a href="#product">Предметка</a>
-        <a href="#biz">Для бізнесу</a>
-        <a href="#bundles">Пакети</a>
-        <a href="#extra">Додатково</a>
-      </nav>
+    <div class="wrap">
+      <div class="row">
+        <h1>Фото-точка — Прайс-лист</h1>
+
+        <div class="nav-wrap">
+          <div class="nav-viewport" data-overflow>
+            <button type="button" class="nav-arrow left" aria-label="Прокрутити ліворуч" hidden>‹</button>
+
+            <nav id="topnav" aria-label="Основна навігація">
+              <a href="#docs">Документи</a>
+              <a href="#print">Фотодрук</a>
+              <a href="#scan">Скан/копії</a>
+              <a href="#retouch">Ретуш та ІІ</a>
+              <a href="#studio">Студія</a>
+              <a href="#product">Предметка</a>
+              <a href="#biz">Для бізнесу</a>
+              <a href="#bundles">Пакети</a>
+              <a href="#extra">Додатково</a>
+            </nav>
+
+            <button type="button" class="nav-arrow right" aria-label="Прокрутити праворуч" hidden>›</button>
+
+            <div class="nav-fade left" aria-hidden="true"></div>
+            <div class="nav-fade right" aria-hidden="true"></div>
+            <div class="nav-hint" id="navHint" aria-hidden="true">Проведіть →</div>
+          </div>
+
+          <button type="button" class="nav-more" aria-haspopup="dialog" aria-controls="navSheet">Усі розділи</button>
+        </div>
+      </div>
     </div>
   </header>
- 
+
   <div class="wrap hero">
-    <span class="badge">Ціни нижче середніх • Оновлено: 24 вересня 2025</span>
-    <p>Друк на Epson L8050, сканування, ретуш та ІІ‑сервіси, студійна і предметна зйомка. Всі ціни у гривнях.</p>
+    <span class="badge">Ціни нижче середніх • <span class="muted">Оновлено: <time datetime="2025-09-24">24 вересня 2025</time></span></span>
+    <p>Друк на Epson L8050, сканування, ретуш та ІІ-сервіси, студійна і предметна зйомка. Всі ціни у гривнях.</p>
     <div class="actions">
-      <button class="btn primary" onclick="window.print()">Друкувати прайс</button>
-      <button class="btn" onclick="location.href='#contacts'">Контакти</button>
+      <button type="button" class="btn primary" data-action="print">Друкувати прайс</button>
+      <button type="button" class="btn" data-action="goto" data-target="#contacts">Контакти</button>
     </div>
   </div>
 
-  <main class="wrap">
+  <main id="main" class="wrap">
     <!-- Документи -->
-    <section id="docs" class="card">
+    <section id="docs" class="card" aria-labelledby="h-docs">
       <div class="head">
-        <h2>Фото на документи</h2>
+        <h2 id="h-docs">Фото на документи</h2>
         <span class="hint">Біометричні вимоги, коректні розміри та фон</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: фото на документи</caption>
         <thead>
           <tr><th>Послуга</th><th>Що входить</th><th>Ціна</th></tr>
         </thead>
@@ -57,13 +80,13 @@
             <td class="price">140 грн</td>
           </tr>
           <tr>
-            <td>Онлайн‑обробка готового фото</td>
+            <td>Онлайн-обробка готового фото</td>
             <td>Клієнт надсилає знімок → підганяємо під вимоги → відправляємо файл</td>
             <td class="price">80 грн</td>
           </tr>
           <tr>
             <td>Терміново (до 15 хв)</td>
-            <td>Пріоритет у черзі, експрес‑обробка</td>
+            <td>Пріоритет у черзі, експрес-обробка</td>
             <td class="price">+50 грн</td>
           </tr>
           <tr>
@@ -74,22 +97,23 @@
         </tbody>
       </table>
       <div class="foot">
-        <span class="note">Фон: білий/світло‑сірий/блакитний. За вимогою — інші відтінки.</span>
+        <span class="note">Фон: білий/світло-сірий/блакитний. За вимогою — інші відтінки.</span>
       </div>
     </section>
 
     <!-- Фотодрук -->
-    <section id="print" class="card">
+    <section id="print" class="card" aria-labelledby="h-print">
       <div class="head">
-        <h2>Фотодрук (глянець/мат)</h2>
+        <h2 id="h-print">Фотодрук (глянець/мат)</h2>
         <span class="hint">Пігментні чорнила, висока деталізація</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: фотодрук</caption>
         <thead>
           <tr><th>Формат</th><th>Опис</th><th>Ціна / шт.</th></tr>
         </thead>
         <tbody>
-          <tr><td>9×13</td><td>Класичні міні‑відбитки</td><td class="price">6 грн</td></tr>
+          <tr><td>9×13</td><td>Класичні міні-відбитки</td><td class="price">6 грн</td></tr>
           <tr><td>10×15</td><td>Стандартний фотодрук</td><td class="price">8 грн</td></tr>
           <tr><td>13×18</td><td>Збільшений формат</td><td class="price">15 грн</td></tr>
           <tr><td>A4</td><td>Якісний друк на фотопапері</td><td class="price">40 грн</td></tr>
@@ -102,25 +126,27 @@
     </section>
 
     <!-- Скан/копії -->
-    <section id="scan" class="card">
+    <section id="scan" class="card" aria-labelledby="h-scan">
       <div class="head">
-        <h2>Сканування та копіювання</h2>
+        <h2 id="h-scan">Сканування та копіювання</h2>
         <span class="hint">PDF/JPG, вирівнювання, обрізання полів</span>
       </div>
-      <div class="grid" style="padding:12px 12px 0">
-        <div class="card" style="border:none">
+      <div class="grid in-card">
+        <div class="subcard">
           <table>
+            <caption class="sr-only">Прайс: сканування</caption>
             <thead><tr><th>Сканування</th><th>Деталі</th><th>Ціна</th></tr></thead>
             <tbody>
               <tr><td>Документ A4</td><td>300 dpi, PDF/JPG</td><td class="price">10 грн/стор.</td></tr>
               <tr><td>Фото (до A5)</td><td>600 dpi, корекція тону</td><td class="price">8 грн/шт.</td></tr>
               <tr><td>Збірка багатосторінкового PDF</td><td>Порядок сторінок, нумерація</td><td class="price">+10 грн/файл</td></tr>
-              <tr><td>OCR (розпізнавання тексту)</td><td>DOCX/PDF‑пошук</td><td class="price">+10 грн/стор.</td></tr>
+              <tr><td>OCR (розпізнавання тексту)</td><td>DOCX/PDF-пошук</td><td class="price">+10 грн/стор.</td></tr>
             </tbody>
           </table>
         </div>
-        <div class="card" style="border:none">
+        <div class="subcard">
           <table>
+            <caption class="sr-only">Прайс: копіювання/друк</caption>
             <thead><tr><th>Копіювання/друк</th><th>Деталі</th><th>Ціна</th></tr></thead>
             <tbody>
               <tr><td>Ч/Б A4</td><td>Текст/схеми</td><td class="price">2 грн/стор.</td></tr>
@@ -136,36 +162,38 @@
     </section>
 
     <!-- Ретуш та ІІ -->
-    <section id="retouch" class="card">
+    <section id="retouch" class="card" aria-labelledby="h-retouch">
       <div class="head">
-        <h2>Ретуш та ІІ‑сервіси</h2>
+        <h2 id="h-retouch">Ретуш та ІІ-сервіси</h2>
         <span class="hint">Акуратно та природно, без «пластика»</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: ретуш та ІІ</caption>
         <thead><tr><th>Послуга</th><th>Що входить</th><th>Ціна</th></tr></thead>
         <tbody>
           <tr><td>Базова ретуш портрета</td><td>Шкіра, дрібні недоліки, зуби, блиски</td><td class="price">70 грн/кадр</td></tr>
           <tr><td>Заміна/очистка фону</td><td>Документи/товари, тінь за потреби</td><td class="price">20 грн/кадр</td></tr>
-          <tr><td>Покращення якості</td><td>Шумодав, різкість, супер‑апскейл</td><td class="price">40 грн/фото</td></tr>
+          <tr><td>Покращення якості</td><td>Шумодав, різкість, супер-апскейл</td><td class="price">40 грн/фото</td></tr>
           <tr><td>Колоризація ч/б фото</td><td>Помірна/акуратна</td><td class="price">90 грн/фото</td></tr>
           <tr><td>Відновлення старих фото</td><td>Чистка подряпин, плям, відтінків</td><td class="price">120–250 грн/фото</td></tr>
-          <tr><td>Стилізовані ІІ‑аватари</td><td>8 стилів за одним фото</td><td class="price">70 грн/набір</td></tr>
+          <tr><td>Стилізовані ІІ-аватари</td><td>8 стилів за одним фото</td><td class="price">70 грн/набір</td></tr>
         </tbody>
       </table>
       <div class="foot"><span class="note">Складні випадки (серйозні пошкодження) — прорахунок індивідуально.</span></div>
     </section>
 
     <!-- Студія -->
-    <section id="studio" class="card">
+    <section id="studio" class="card" aria-labelledby="h-studio">
       <div class="head">
-        <h2>Міні‑студійна зйомка</h2>
+        <h2 id="h-studio">Міні-студійна зйомка</h2>
         <span class="hint">Камера + софтбокс + фон</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: міні-студійна зйомка</caption>
         <thead><tr><th>Послуга</th><th>Що входить</th><th>Ціна</th></tr></thead>
         <tbody>
-          <tr><td>Бізнес‑портрет</td><td>15 хв, 2–3 відретушовані кадри, файл + A4</td><td class="price">400 грн</td></tr>
-          <tr><td>Міні‑сесія для соцмереж</td><td>15 хв, 6–10 кадрів, базова корекція</td><td class="price">350 грн</td></tr>
+          <tr><td>Бізнес-портрет</td><td>15 хв, 2–3 відретушовані кадри, файл + A4</td><td class="price">400 грн</td></tr>
+          <tr><td>Міні-сесія для соцмереж</td><td>15 хв, 6–10 кадрів, базова корекція</td><td class="price">350 грн</td></tr>
           <tr><td>Додатковий відретушований кадр</td><td>Понад пакет</td><td class="price">60 грн/шт.</td></tr>
         </tbody>
       </table>
@@ -173,17 +201,18 @@
     </section>
 
     <!-- Предметка -->
-    <section id="product" class="card">
+    <section id="product" class="card" aria-labelledby="h-product">
       <div class="head">
-        <h2>Предметна зйомка (маркетплейси)</h2>
+        <h2 id="h-product">Предметна зйомка (маркетплейси)</h2>
         <span class="hint">Білий фон + базова ретуш, готово до публікації</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: предметна зйомка</caption>
         <thead><tr><th>Послуга</th><th>Що входить</th><th>Ціна</th></tr></thead>
         <tbody>
           <tr><td>Кадр на білому фоні</td><td>Світло, вирівнювання, чистий фон</td><td class="price">50 грн/кадр</td></tr>
           <tr><td>Набір 5 ракурсів</td><td>Повороти/деталі, єдине світло</td><td class="price">220 грн/товар</td></tr>
-          <tr><td>ІІ‑«лайфстайл» фон</td><td>1 сцена під товар</td><td class="price">30 грн/кадр</td></tr>
+          <tr><td>ІІ-«лайфстайл» фон</td><td>1 сцена під товар</td><td class="price">30 грн/кадр</td></tr>
           <tr><td>Пакет 10+ товарів</td><td>Знижка за обсяг</td><td class="price">–10%</td></tr>
         </tbody>
       </table>
@@ -191,12 +220,13 @@
     </section>
 
     <!-- Для бізнесу -->
-    <section id="biz" class="card">
+    <section id="biz" class="card" aria-labelledby="h-biz">
       <div class="head">
-        <h2>Для бізнесу</h2>
+        <h2 id="h-biz">Для бізнесу</h2>
         <span class="hint">Малі тиражі «тут і зараз»</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: для бізнесу</caption>
         <thead><tr><th>Послуга</th><th>Що входить</th><th>Ціна</th></tr></thead>
         <tbody>
           <tr><td>Візитка — дизайн</td><td>Односторонній макет, підготовка до друку</td><td class="price">80 грн</td></tr>
@@ -209,35 +239,37 @@
     </section>
 
     <!-- Пакети -->
-    <section id="bundles" class="card">
+    <section id="bundles" class="card" aria-labelledby="h-bundles">
       <div class="head">
-        <h2>Готові пакети</h2>
+        <h2 id="h-bundles">Готові пакети</h2>
         <span class="hint">Зручно та вигідніше</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: готові пакети</caption>
         <thead><tr><th>Пакет</th><th>Склад</th><th>Ціна</th></tr></thead>
         <tbody>
           <tr><td>«Документи Експрес»</td><td>Зйомка → ретуш → друк 4–6 шт. + файл</td><td class="price">150 грн</td></tr>
-          <tr><td>«Бізнес‑портрет»</td><td>15 хв студія, 3 ретуші, файл + друк A4</td><td class="price">400 грн</td></tr>
-          <tr><td>«Реставрація Фото»</td><td>Скан → ІІ‑очистка → ручна правка → друк 10×15</td><td class="price">220 грн</td></tr>
-          <tr><td>«Товар Старт»</td><td>5 ракурсів + 1 ІІ‑фон, експорт під маркетплейси</td><td class="price">200 грн/товар</td></tr>
+          <tr><td>«Бізнес-портрет»</td><td>15 хв студія, 3 ретуші, файл + друк A4</td><td class="price">400 грн</td></tr>
+          <tr><td>«Реставрація Фото»</td><td>Скан → ІІ-очистка → ручна правка → друк 10×15</td><td class="price">220 грн</td></tr>
+          <tr><td>«Товар Старт»</td><td>5 ракурсів + 1 ІІ-фон, експорт під маркетплейси</td><td class="price">200 грн/товар</td></tr>
         </tbody>
       </table>
       <div class="foot"><span class="note">Окремі послуги з пакетів можна замінити/додати за доплатою.</span></div>
     </section>
 
     <!-- Додатково -->
-    <section id="extra" class="card">
+    <section id="extra" class="card" aria-labelledby="h-extra">
       <div class="head">
-        <h2>Додаткові умови</h2>
+        <h2 id="h-extra">Додаткові умови</h2>
         <span class="hint">Знижки, терміновість, доставка файлів</span>
       </div>
       <table>
+        <caption class="sr-only">Прайс: додаткові умови</caption>
         <thead><tr><th>Опція</th><th>Опис</th><th>Умови</th></tr></thead>
         <tbody>
           <tr><td>Надбавка за терміновість</td><td>Пріоритетне виконання</td><td class="price">+30%</td></tr>
           <tr><td>Складний виріз/ретуш</td><td>Волосся, дрібні деталі, скло</td><td class="price">+20–40%</td></tr>
-          <tr><td>Доставка файлів</td><td>Telegram/Viber/e‑mail/хмара</td><td class="price">безкоштовно</td></tr>
+          <tr><td>Доставка файлів</td><td>Telegram/Viber/e-mail/хмара</td><td class="price">безкоштовно</td></tr>
           <tr><td>Зберігання файлів</td><td>7 днів — безкоштовно, далі</td><td class="price">20 грн/місяць</td></tr>
           <tr><td>Знижки</td><td>Студенти/пенсіонери, 10+ товарів, 50+ відбитків</td><td class="price">–10…15%</td></tr>
           <tr><td>Оцифрування архіву</td><td>Пакет 100 фото, сортування по папках</td><td class="price">300 грн</td></tr>
@@ -249,18 +281,18 @@
     </section>
 
     <!-- Контакти -->
-    <section id="contacts" class="card">
+    <section id="contacts" class="card" aria-labelledby="h-contacts">
       <div class="head">
-        <h2>Контакти</h2>
+        <h2 id="h-contacts">Контакти</h2>
         <span class="hint">Замовляйте онлайн або приходьте офлайн</span>
       </div>
-      <div class="foot" style="display:block; line-height:1.8">
-        <div><strong>Фото‑точка</strong></div>
-        <div>Адреса: <span class="muted"> </span></div>
+      <div class="foot contacts">
+        <div><strong>Фото-точка</strong></div>
+        <div>Адреса: <span class="muted">—</span></div>
         <div>Години: <span class="muted">Пн–Сб 10:00–19:00 (Нд за домовленістю)</span></div>
-        <div>Телефон: <span class="muted">+380 (XX) XXX‑XX‑XX</span></div>
+        <div>Телефон: <a class="muted" href="tel:+380000000000">+380 (XX) XXX-XX-XX</a></div>
         <div>Telegram/Viber: <span class="muted">@your_handle</span></div>
-        <div>E‑mail: <span class="muted">you@example.com</span></div>
+        <div>E-mail: <a class="muted" href="mailto:you@example.com">you@example.com</a></div>
       </div>
     </section>
   </main>
@@ -268,16 +300,48 @@
   <footer>
     <div class="wrap cols">
       <div>
-        <small>© <span id="y"></span> Фото‑точка. Устаткування: Epson L8050, сканер, камера, софтбокс, фон, ПК, ІІ‑сервіси.</small>
+        <small>© <span id="y"></span> Фото-точка. Устаткування: Epson L8050, сканер, камера, софтбокс, фон, ПК, ІІ-сервіси.</small>
       </div>
-      <div style="text-align:right">
+      <div>
         <small class="muted">Версія прайсу: 24.09.2025</small>
       </div>
     </div>
   </footer>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+  <!-- Bottom-sheet меню -->
+  <dialog id="navSheet" class="sheet" aria-label="Усі розділи">
+    <form method="dialog">
+      <div class="sheet-head">
+        <strong>Усі розділи</strong>
+        <button class="sheet-close" type="submit" aria-label="Закрити">✕</button>
+      </div>
+    </form>
+    <div class="sheet-body">
+      <a href="#docs">Документи</a>
+      <a href="#print">Фотодрук</a>
+      <a href="#scan">Скан/копії</a>
+      <a href="#retouch">Ретуш та ІІ</a>
+      <a href="#studio">Студія</a>
+      <a href="#product">Предметка</a>
+      <a href="#biz">Для бізнесу</a>
+      <a href="#bundles">Пакети</a>
+      <a href="#extra">Додатково</a>
+      <a href="#contacts">Контакти</a>
+    </div>
+  </dialog>
+
+  <!-- Локальний бізнес (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"LocalBusiness",
+    "name":"Фото-точка",
+    "description":"Фото на документи, фотодрук, сканування, ретуш, студійна та предметна зйомка.",
+    "telephone":"+380000000000",
+    "address":{"@type":"PostalAddress","addressCountry":"UA"},
+    "openingHours":"Mo-Sa 10:00-19:00",
+    "url":""
+  }
   </script>
 </body>
 </html>

@@ -101,30 +101,18 @@ function safeLSSet(key, val){
       }
     });
 
+    // Клик по пунктам в шите: закрыть и подсветить соответствующую вкладку в хедере
     sheet.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         if (sheet.close) sheet.close(); else sheet.removeAttribute('open');
+        setActive(a.getAttribute('href'));
       });
     });
   }
 
-  // Хинт: показать один раз (безопасный localStorage)
-  if (hint) {
-    const shown = safeLSGet('navHintShown');
-    if (shown) {
-      hint.remove();
-    } else {
-      const dismiss = () => {
-        hint.remove();
-        safeLSSet('navHintShown', '1');
-      };
-      setTimeout(dismiss, 2500);
-      nav.addEventListener('scroll', dismiss, { once: true });
-    }
-  }
-
   // Scroll-spy (подсветка активного раздела)
   const links = Array.from(nav.querySelectorAll('a'));
+
   function setActive(href) {
     links.forEach(a => {
       const match = a.getAttribute('href') === href;
@@ -133,6 +121,14 @@ function safeLSSet(key, val){
       else a.removeAttribute('aria-current');
     });
   }
+
+  // Немедленная подсветка при клике по ссылкам в самом nav
+  links.forEach(a => {
+    a.addEventListener('click', () => setActive(a.getAttribute('href')));
+  });
+
+  // Начальная подсветка (если на старте мы над героем, выбираем #docs)
+  setActive(location.hash || '#docs');
 
   if ('IntersectionObserver' in window) {
     const obs = new IntersectionObserver((ents) => {
@@ -145,11 +141,10 @@ function safeLSSet(key, val){
     }, { rootMargin: '-60% 0px -35% 0px', threshold: 0.01 });
 
     document.querySelectorAll('main section[id]').forEach(sec => obs.observe(sec));
-  } else {
-    const setByHash = () => setActive(location.hash || '#docs');
-    setByHash();
-    window.addEventListener('hashchange', setByHash);
   }
+
+  // Подсветка при смене хэша (например, переход по ссылке из истории)
+  window.addEventListener('hashchange', () => setActive(location.hash || '#docs'));
 
   // Инициализация
   updateOverflowUI();
